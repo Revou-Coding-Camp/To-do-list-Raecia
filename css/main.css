@@ -27,6 +27,43 @@
     --item-bg: #ffffff;
 }
 
+/* Light mode (default) */
+body {
+    background: linear-gradient(135deg, #64B5F6 0%, #1976D2 100%);
+    color: #333;
+}
+
+/* Dark mode */
+body.dark-mode {
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    color: #f1f1f1;
+}
+
+body.dark-mode .auth-card {
+    background-color: #222c36;
+    color: #f1f1f1;
+}
+
+body.dark-mode .auth-content h1,
+body.dark-mode .brand {
+    color: #90caf9;
+}
+
+body.dark-mode input,
+body.dark-mode .auth-button {
+    background-color: #263238;
+    color: #f1f1f1;
+    border-color: #37474f;
+}
+
+body.dark-mode .auth-button {
+    background: linear-gradient(90deg, #1976D2 0%, #64B5F6 100%);
+}
+
+body.dark-mode .auth-illustration {
+    filter: brightness(0.8) invert(1);
+}
+
 /* ==================== Base Styles ==================== */
 * {
     box-sizing: border-box;
@@ -503,6 +540,20 @@ input[type="password"]:focus, select:focus {
     position: relative;
 }
 
+.auth-illustration {
+    max-width: 140px;
+    margin-bottom: 30px;
+    opacity: 0.92;
+    animation: float 3s ease-in-out infinite;
+    display: block;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
 .auth-image img {
     max-width: 80%;
     max-height: 200px;
@@ -547,6 +598,27 @@ input[type="password"]:focus, select:focus {
 .success-text {
     color: #2E7D32;
     font-weight: 500;
+}
+
+.redirect-indicator {
+    margin-top: 24px;
+    padding: 16px;
+    background: #e3f2fd;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+    color: #1976d2;
+    font-weight: 500;
+    gap: 12px;
+}
+
+.redirect-indicator .success-icon {
+    font-size: 24px;
+}
+
+.redirect-indicator .success-text {
+    font-size: 16px;
 }
 
 /* ==================== ANIMATIONS ==================== */
@@ -620,4 +692,41 @@ input[type="password"]:focus, select:focus {
         width: 100%;
         justify-content: flex-end;
     }
+}
+
+/* ==================== Theme Toggle ==================== */
+/* Theme toggle button styles */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .theme-toggle {
+    color: #90caf9;
+}
+
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #1976D2;
+    font-size: 22px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
 }
