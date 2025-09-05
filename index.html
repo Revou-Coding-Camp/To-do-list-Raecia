@@ -3,52 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List App</title>
+    <title>Login - To-Do List App</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="app-wrapper">
-        <div class="container">
-            <header class="app-header">
-                <h1><i class="fas fa-tasks"></i> To-Do List</h1>
-            </header>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-content">
+                <h1>LOGIN</h1>
             
-            <form id="todo-form">
-                <div class="form-group">
-                    <input type="text" id="todo-input" placeholder="Enter your task" required>
-                </div>
-                <div class="form-group">
-                    <input type="date" id="date-input" required>
-                </div>
-                <div class="form-group">
-                    <select id="status-input" required>
-                        <option value="pending">Pending</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add</button>
-            </form>
-            
-            <div class="filter-section">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="filter-input" placeholder="Filter tasks">
+                <form id="login-form" class="auth-form">
+                    <div class="form-field">
+                        <label for="username">USERNAME</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username">
+                        <p class="error-message" id="username-error"></p>
+                    </div>
+                    
+                    <div class="form-field">
+                        <label for="password">PASSWORD</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password">
+                        <p class="error-message" id="password-error"></p>
+                    </div>
+                  
+                    <button type="submit" class="auth-button">LOGIN</button>
+                    
             </div>
             
-            <div class="tasks-container">
-                <ul id="todo-list"></ul>
-                <div id="empty-state" class="empty-state">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>No tasks yet. Add a new task to get started!</p>
-                </div>
+            <div class="auth-image">
+                <div class="brand">Raecia</div>
             </div>
-            
-            <footer class="app-footer">
-                <p>&copy; 2025 Raecia | All Rights Reserved</p>
-            </footer>
         </div>
     </div>
+    
     <script src="js/main.js"></script>
 </body>
 </html>

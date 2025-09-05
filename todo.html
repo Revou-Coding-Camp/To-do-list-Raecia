@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <div class="container">
+            <header class="app-header">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <h1 style="display: flex; align-items: center;"><i class="fas fa-tasks"></i> To-Do List</h1>
+                        <button id="dark-mode-toggle" title="Toggle dark mode" style="background: none; border: none; cursor: pointer; font-size: 22px; color: #fff; margin-left: 12px;">
+                            <i id="dark-mode-icon" class="fas fa-moon"></i>
+                        </button>
+                    </div>
+            </header>
+            
+            <form id="todo-form">
+                <div class="form-group">
+                    <input type="text" id="todo-input" placeholder="Enter your task" required>
+                </div>
+                <div class="form-group">
+                    <input type="date" id="date-input" required>
+                </div>
+                <!-- Status dropdown removed as requested -->
+                <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add</button>
+            </form>
+            
+            <div class="filter-section">
+                <label for="filter-status" style="margin-right:8px; font-weight:500; color:#fff;">Filter:</label>
+                <select id="filter-status" style="padding:6px 12px; border-radius:8px; font-size:14px;">
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            
+            <div class="tasks-container">
+                    <ul id="todo-list"></ul>
+                <div id="empty-state" class="empty-state">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>No tasks yet. Add a new task to get started!</p>
+                </div>
+            </div>
+            
+            <footer class="app-footer">
+                <p>&copy; 2023 Raecia | All Rights Reserved</p>
+            </footer>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

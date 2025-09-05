@@ -1,6 +1,6 @@
 /**
  * To-Do List App with Authentication
- * Developed by Raecia © 2025
+ * Developed by Raecia © 2023
  * 
  * Features:
  * - Add, delete, and filter tasks
@@ -72,9 +72,8 @@ function initTodoApp() {
     const todoForm = document.getElementById('todo-form');
     const todoInput = document.getElementById('todo-input');
     const dateInput = document.getElementById('date-input');
-    const statusInput = document.getElementById('status-input');
     const todoList = document.getElementById('todo-list');
-    const filterInput = document.getElementById('filter-input');
+    const filterStatus = document.getElementById('filter-status');
     const emptyState = document.getElementById('empty-state');
 
     // Set today as the minimum date
@@ -105,20 +104,20 @@ function initTodoApp() {
     }
 
     // Render todos with filter
-    function renderTodos(filter = '') {
+    function renderTodos(filterValue = 'all') {
         todoList.innerHTML = '';
+        let filteredTodos = todos;
         
-        const filteredTodos = todos.filter(todo => 
-            todo.text.toLowerCase().includes(filter.toLowerCase())
-        );
+        // Filter by status if not 'all'
+        if (filterValue !== 'all') {
+            filteredTodos = todos.filter(todo => todo.status === filterValue);
+        }
         
         filteredTodos.forEach((todo, idx) => {
             const li = document.createElement('li');
             li.className = 'todo-item';
-            
             // Determine status class
             const statusClass = todo.status || 'pending';
-            
             li.innerHTML = `
                 <div class="todo-content">
                     <div class="todo-text">${todo.text}</div>
@@ -127,9 +126,11 @@ function initTodoApp() {
                             <i class="far fa-calendar-alt"></i>
                             ${formatDate(todo.date)}
                         </div>
-                        <div class="todo-status ${statusClass}" title="Click to change status">
-                            ${todo.status || 'Pending'}
-                        </div>
+                        <select class="todo-status-select ${statusClass}" data-index="${idx}" title="Change status">
+                            <option value="pending" ${todo.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="in-progress" ${todo.status === 'in-progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="completed" ${todo.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        </select>
                     </div>
                 </div>
                 <div class="todo-actions">
@@ -138,15 +139,12 @@ function initTodoApp() {
                     </button>
                 </div>
             `;
-            
-            // Add with animation
             todoList.appendChild(li);
             setTimeout(() => {
                 li.style.opacity = '1';
                 li.style.transform = 'translateY(0)';
             }, 10);
         });
-        
         updateEmptyState();
     }
 
@@ -155,7 +153,7 @@ function initTodoApp() {
         e.preventDefault();
         const text = todoInput.value.trim();
         const date = dateInput.value;
-        const status = statusInput.value;
+        const status = 'pending'; // Default status for new tasks
         
         // Validate input
         if (!text) {
@@ -177,67 +175,65 @@ function initTodoApp() {
         // Clear form
         todoInput.value = '';
         dateInput.value = '';
-        statusInput.value = 'pending'; // Reset to default
         
         // Show success notification
         showNotification('Task added successfully!', 'success');
         
         // Render todos
-        renderTodos(filterInput.value);
+        renderTodos(filterStatus.value);
     });
 
-    // Handle todo actions (delete and status change)
+    // Handle todo actions (delete)
     todoList.addEventListener('click', function(e) {
-        // Handle delete button
         const deleteBtn = e.target.closest('.delete-btn');
         if (deleteBtn) {
             const idx = parseInt(deleteBtn.getAttribute('data-index'));
-            // Add delete animation
             const todoItem = deleteBtn.closest('.todo-item');
             todoItem.style.opacity = '0';
             todoItem.style.height = '0';
             todoItem.style.marginBottom = '0';
             todoItem.style.padding = '0';
             todoItem.style.overflow = 'hidden';
-            
             setTimeout(() => {
                 todos.splice(idx, 1);
                 saveTodos();
-                renderTodos(filterInput.value);
+                renderTodos(filterStatus.value);
                 showNotification('Task deleted', 'warning');
             }, 300);
             return;
         }
-        
-        // Handle status change on click
-        const statusElement = e.target.closest('.todo-status');
-        if (statusElement) {
-            const li = e.target.closest('.todo-item');
-            const idx = Array.from(todoList.children).indexOf(li);
-            
-            if (idx !== -1) {
-                // Cycle through statuses: pending -> in-progress -> completed -> pending
-                const currentStatus = todos[idx].status || 'pending';
-                let newStatus;
-                
-                if (currentStatus === 'pending') {
-                    newStatus = 'in-progress';
-                } else if (currentStatus === 'in-progress') {
-                    newStatus = 'completed';
-                } else {
-                    newStatus = 'pending';
-                }
-                
-                todos[idx].status = newStatus;
-                saveTodos();
-                renderTodos(filterInput.value);
-                showNotification(`Task marked as ${newStatus}`, 'success');
-            }
-        }
     });
 
-    // Filter todos as typing
-    filterInput.addEventListener('input', function() {
+    // Handle status change via dropdown
+    todoList.addEventListener('change', function(e) {
+        const statusSelect = e.target.closest('.todo-status-select');
+        if (statusSelect) {
+            const idx = parseInt(statusSelect.getAttribute('data-index'));
+            const newStatus = statusSelect.value;
+            todos[idx].status = newStatus;
+            saveTodos();
+            renderTodos(filterStatus.value);
+            showNotification(`Task marked as ${newStatus}`, 'success');
+        }
+    });
+    // Dark mode toggle
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const darkModeIcon = document.getElementById('dark-mode-icon');
+    if (darkModeToggle && darkModeIcon) {
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.classList.remove('fa-moon');
+                darkModeIcon.classList.add('fa-sun');
+            } else {
+                darkModeIcon.classList.remove('fa-sun');
+                darkModeIcon.classList.add('fa-moon');
+            }
+        });
+    }
+
+    // Filter todos by status
+    filterStatus.addEventListener('change', function() {
         renderTodos(this.value);
     });
 
@@ -245,7 +241,7 @@ function initTodoApp() {
     dateInput.valueAsDate = new Date();
     
     // Initial render
-    renderTodos();
+    renderTodos('all');
     
     // Add subtle animation to the header
     const header = document.querySelector('.app-header');
@@ -340,7 +336,7 @@ function initLoginForm() {
         
         // Redirect to the main app page after a short delay
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = 'todo.html';
         }, 1500);
     });
     
@@ -549,7 +545,7 @@ function initSignupForm() {
         
         // Redirect to login page after a short delay
         setTimeout(() => {
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }, 1500);
     });
     
